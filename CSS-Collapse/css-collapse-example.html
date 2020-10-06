@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<title>CSS Collapse Example</title>
-		
+
 		<style>
 			.collapse {
 				max-height: 0;
 				overflow: hidden;
-				transition: max-height 1s; 
+				transition: max-height 1s;
 			}
-			
-			:checked ~ .collapse {
+
+			:checked~.collapse {
 				max-height: 90px;
 			}
-			
-			
-			
-			
+
+			#collapse-checkbox {
+				display: none;
+			}
+
 			#collapse-btn::before {
 				content: " ";
 				display: inline-block;
@@ -30,20 +31,18 @@
 				transition: transform 1s;
 			}
 
-
-			:checked ~ #collapse-btn::before {
+			:checked~#collapse-btn::before {
 				transform: rotate(90deg);
 			}
 		</style>
 	</head>
 
 	<body>
-		
-		<h1>CSS Collapse</h1>
-		
+		<h1>HTML & CSS Collapse</h1>
+
 		<p>A section that can be collapsed in pure HTML and CSS.</p>
-		
-		<input type="checkbox" id="collapse-checkbox" style="display:none;">
+
+		<input type="checkbox" id="collapse-checkbox">
 		<label for="collapse-checkbox" id="collapse-btn">Collapsible Section</label>
 		<div class="collapse">
 			<ul>
@@ -52,11 +51,14 @@
 				<li>collapsible content 3</li>
 			</ul>
 		</div>
-		
+
 		<p>
-			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+			dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+			clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+			consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+			diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+			takimata sanctus est Lorem ipsum dolor sit amet.
 		</p>
-		
-		
 	</body>
 </html>

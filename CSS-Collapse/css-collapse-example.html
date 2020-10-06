@@ -4,7 +4,36 @@
 		<title>CSS Collapse Example</title>
 		
 		<style>
+			.collapse {
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 1s; 
+			}
 			
+			:checked ~ .collapse {
+				max-height: 90px;
+			}
+			
+			
+			
+			
+			#collapse-btn::before {
+				content: " ";
+				display: inline-block;
+
+				border-top: 7px solid transparent;
+				border-bottom: 7px solid transparent;
+				border-left: 15px solid currentColor;
+
+				margin-right: 5px;
+
+				transition: transform 1s;
+			}
+
+
+			:checked ~ #collapse-btn::before {
+				transform: rotate(90deg);
+			}
 		</style>
 	</head>
 
@@ -12,6 +41,21 @@
 		
 		<h1>CSS Collapse</h1>
 		
+		<p>A section that can be collapsed in pure HTML and CSS.</p>
+		
+		<input type="checkbox" id="collapse-checkbox" style="display:none;">
+		<label for="collapse-checkbox" id="collapse-btn">Collapsible Section</label>
+		<div class="collapse">
+			<ul>
+				<li>collapsible content 1</li>
+				<li>collapsible content 2</li>
+				<li>collapsible content 3</li>
+			</ul>
+		</div>
+		
+		<p>
+			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+		</p>
 		
 		
 	</body>

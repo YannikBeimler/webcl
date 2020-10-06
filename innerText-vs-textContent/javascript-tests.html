@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>innerText vs. textContent</title>
+	</head>
+
+	<body>
+		
+		<h1>Unterschied zwischen innerText und textContent</h1>
+		
+		<p id="text1">Hello <strong>World</strong></p>
+		<p id="text2">Hello <span style="display:none">World</span></p>
+		<p id="text3">Hello <style>#id { color: red; }</style> <script>//example</script></p>
+		<p id="text4">      Hello	World  
+line Break  </p>
+		<p id="text5">Hello <br />World</p>
+		<p id="text6" style="white-space: pre-wrap;">  Hello 
+		World  </p>
+		<p id="text7" style="width:1px;">Hello World</p>
+		
+		<p id="write1">Hello <br /><strong>World</strong> a   
+		new line      b <style>#id { color: red; }</style> <script>//example</script></p>
+		<p id="write2">Hello <br /><strong>World</strong> a   
+		new line      b <style>#id { color: red; }</style> <script>//example</script></p>
+		<p id="write3"></p>
+		
+		
+		<h2>Resultat</h2>
+		<p id="result">Tests success: </p>
+		<h3>Zeit zum lesen</h3>
+		<p id="time1"></p>
+		<p id="time2"></p>
+		<h3>Zeit zum schreiben</h3>
+		<p id="time3"></p>
+		<p id="time4"></p>
+		
+		
+		<script>
+			
+			const tests = [];
+			
+			// Bei normalem Auslesen des Texts sind innerText und textContent in der Funktion gleich. HTML Tags werden bei beiden Varianten herausgefiltert.
+			const text1 = document.getElementById('text1');
+			tests.push(text1.innerText 		=== "Hello World");
+			tests.push(text1.textContent 	=== "Hello World");
+			
+			// Verborgene Texte (z.B. mit "display:none") werden mit textContent angezeigt, jedoch nicht mit innerText.
+			const text2 = document.getElementById('text2');
+			tests.push(text2.innerText 		=== "Hello")
+			tests.push(text2.textContent 	=== "Hello World");
+			
+			// Ebenfalls werden Inhalte von Style- und Script-Tags nur mit textContent angezeigt.
+			const text3 = document.getElementById('text3');
+			tests.push(text3.innerText 		=== "Hello");
+			tests.push(text3.textContent 	=== "Hello #id { color: red; } //example");
+			
+			// Ausserdem werden bei textContent WhiteSpaces und LineBreaks immer übernommen, bei innerText jedoch nicht, wenn diese nicht sichtbar sind im Browser.
+			const text4 = document.getElementById('text4');
+			tests.push(text4.innerText 		=== "Hello World line Break");
+			tests.push(text4.textContent 	=== "      Hello	World  \nline Break  ");
+			
+			// Der br-Tag hingegen wird bei textContent herausgefiltert, jedoch bei innerText in einen LineBreak umgewandelt.
+			const text5 = document.getElementById('text5');
+			tests.push(text5.innerText 		=== "Hello\nWorld");
+			tests.push(text5.textContent 	=== "Hello World");
+			
+			// Werden die WhiteSpaces und LineBreaks im Browser sichtbar gemacht (mit white-space: pre), sind sie in innerText und in textContent enthalten.
+			const text6 = document.getElementById('text6');
+			tests.push(text6.innerText 		=== "  Hello \n		World  ");
+			tests.push(text6.textContent 	=== "  Hello \n		World  ");
+			
+			// Wenn die Zeile aufgrund der Breite im Browser automatisch umgebrochen wird, hat dies keinen Einfluss, weder auf innerText noch auf textContent.
+			const text7 = document.getElementById('text7');
+			tests.push(text7.innerText 		=== "Hello World");
+			tests.push(text7.textContent 	=== "Hello World");
+			
+			
+			// Bei schreibendem Zugriff bleibt mit textContent der Inhalt genau so wie er ist. 
+			// Mit innerText werden die LineBreaks zu br-Tags umgewandelt, jedoch bleiben WhiteSpaces erhalten. 
+			// Tags werden bei beiden Varianten HTML-encoded.
+			const write1 = document.getElementById('write1');
+			const write2 = document.getElementById('write2');
+			write1.innerText 	= "Hello	    World \nline Break<br>new Line";
+			write2.textContent 	= "Hello	    World \nline Break<br>new Line";
+			tests.push(write1.innerHTML === "Hello	    World <br>line Break&lt;br&gt;new Line");
+			tests.push(write2.innerHTML === "Hello	    World \nline Break&lt;br&gt;new Line");
+			
+			
+			const success = tests.reduce((acc, curr) => acc && curr);
+			document.getElementById('result').append(success);
+			
+			// Zusammenfassung: 
+			// innerText enthält nur was im Browser sichtbar ist. Beim Schreiben werden LineBreaks zu br-Tags umgewandelt.
+			// textContent enthält alles was tatsächlich vorhanden ist (ausser HTML-Tags selbst). Beim Schreiben wird der Inhalt genau so eingefüt wie er ist.
+			
+			
+			
+			
+			// Zeitmessung (lesen): textContent ist viel schneller als innerText, da innerText zuerst die Layout Informationen berechnen muss.
+			const n = 1000000;
+			
+			const startInnerText = Date.now();
+			for (let i = 0; i < n; i++) {
+				const _ = text1.innerText;
+			}
+			const timeInnerText = Date.now() - startInnerText;
+			
+			const startTextContent = Date.now();
+			for (let i = 0; i < n; i++) {
+				const _ = text1.textContent;
+			}
+			const timeTextContent = Date.now() - startTextContent;
+			
+			document.getElementById('time1').append(`${n} * innerText = ${timeInnerText} ms` );
+			document.getElementById('time2').append(`${n} * textContent = ${timeTextContent} ms` );
+			
+			
+			// Zeitmessung (schreiben): textContent ist wieder viel schneller als innerText, da innerText noch nach LineBreaks suchen und gegebenenfalls ersetzen muss.
+			const write3 = document.getElementById('write3');
+			
+			const startInnerText2 = Date.now();
+			for (let i = 0; i < n; i++) {
+				write3.innerText = "Hello World";
+			}
+			const timeInnerText2 = Date.now() - startInnerText2;
+			
+			write3.innerHTML = "";
+			const startTextContent2 = Date.now();
+			for (let i = 0; i < n; i++) {
+				write3.textContent = "Hello World";
+			}
+			const timeTextContent2 = Date.now() - startTextContent2;
+			
+			document.getElementById('time3').append(`${n} * innerText = ${timeInnerText2} ms` );
+			document.getElementById('time4').append(`${n} * textContent = ${timeTextContent2} ms` );
+			
+			
+			
+			// Fazit:
+			// Wenn mit LineBreaks gearbeitet oder der rein sichtbare Text gebraucht wird, ist innerText einfacher, da es die Arbeit bereits macht.
+			// Möchte man den Text genau so wie er ist oder es handelt sich nur um einzelne Wörter (ohne LineBreaks oder WhiteSpaces) ist textContent besser geeignet und schneller.
+			
+		</script>
+		
+	</body>
+</html>

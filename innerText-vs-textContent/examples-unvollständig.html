@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>innerText vs. textContent</title>
+		
+		<style>
+			div.example {
+				background-color: lightgray;
+				margin: 20px 0;
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<h1>Unterschied zwischen innerText und textContent</h1>
+		
+		<div class="example">
+			<h2>Beispiel 1</h2>
+			<p>Bei normalem Auslesen des Texts sind innerText und textContent in der Funktion gleich. HTML Tags werden bei beiden Varianten herausgefiltert.</p>
+			<h3>Eingabe:</h3>
+			<p class="input">Hello <strong>World</strong> <br />new Line</p>
+		</div>
+		
+		<div class="example">
+			<h2>Beispiel 2</h2>
+			<p>Verborgene Texte (z.B. mit "display:none") werden mit textContent angezeigt, jedoch nicht mit innerText.</p>
+			<h3>Eingabe:</h3>
+			<p class="input">Hello <span style="display:none">World</span></p>
+		</div>
+		
+		<div class="example">
+			<h2>Beispiel 3</h2>
+			<p>Ebenfalls werden Inhalte von Style- und Script-Tags nur mit textContent angezeigt.</p>
+			<h3>Eingabe:</h3>
+			<p class="input">Hello <style>#id { color: red; }</style> <script>//example</script></p>
+		</div>
+		
+		<div class="example">
+			<h2>Beispiel 4</h2>
+			<p>Ausserdem werden bei textContent WhiteSpaces immer übernommen, bei innerText jedoch nur, wenn diese sichtbar sind.</p>
+			<h3>Eingabe:</h3>
+			<p class="input">      Hello      World</p>
+		</div>
+		
+		<script>
+			// Durch alle Examples iterieren
+			const examples = Array.from(document.getElementsByClassName('example'));
+			examples.forEach(example => {
+				// Text aus Input auslesen
+				const input = example.getElementsByClassName('input')[0]
+				const innerText = input.innerText;
+				const textContent = input.textContent;
+				
+				// Ausgabe-Titel erstellen
+				const h3innerText = document.createElement("h3");
+				const h3textContent = document.createElement("h3");
+				h3innerText.append("Ausgabe innerText");
+				h3textContent.append("Ausgabe textContent");
+				
+				// Ausgabe-Text erstellen
+				const pInnerText = document.createElement("p");
+				const pTextContent = document.createElement("p");
+				pInnerText.append(innerText);
+				pTextContent.append(textContent);
+				
+				// Ausgabe an Example anfügen
+				example.append(h3innerText);
+				example.append(pInnerText);
+				example.append(h3textContent);
+				example.append(pTextContent);
+			});
+		</script>
+		
+	</body>
+</html>

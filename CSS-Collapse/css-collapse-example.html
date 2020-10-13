@@ -4,21 +4,24 @@
 		<title>CSS Collapse Example</title>
 
 		<style>
-			.collapse {
+            /* hide collapsible div */
+			input+label+div.collapse {
 				max-height: 0;
 				overflow: hidden;
 				transition: max-height 1s;
 			}
 
-			:checked~.collapse {
+			input:checked+label+div.collapse {
 				max-height: 90px;
 			}
 
-			#collapse-checkbox {
+            /* hide checkbox */
+			input#collapse-checkbox {
 				display: none;
 			}
 
-			#collapse-btn::before {
+            /* triangle before checkbox */
+            input+label#collapse-btn::before {
 				content: " ";
 				display: inline-block;
 
@@ -30,8 +33,9 @@
 
 				transition: transform 1s;
 			}
-
-			:checked~#collapse-btn::before {
+            
+            /* triangle turn on click */
+			input:checked+label#collapse-btn::before {
 				transform: rotate(90deg);
 			}
 		</style>
